@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import PokemonLogo from "../assets/pokemon-logo.png";
 import memoryGame from "../assets/memory-game.png";
 import Btn from "./Btn";
 import BtnRounded from "./BtnRounded";
 import { mdiMusic, mdiVolumeHigh } from "@mdi/js";
 import Icon from "@mdi/react";
-import Game from "./Game";
 import EasyLevel from "./EasyLevel";
 import MediumLevel from "./MediumLevel";
 import HardLevel from "./HardLevel";
 
 export default function Home({ setGameStart, setLevel }) {
+  
   function handleEasyClick() {
     setGameStart(true);
     setLevel(<EasyLevel />);
@@ -32,9 +32,9 @@ export default function Home({ setGameStart, setLevel }) {
         <img className="w-80" src={memoryGame} alt="" />
       </div>
       <div className="flex gap-5">
-        <Btn name="Easy" onCLick={handleEasyClick} />
-        <Btn name="Medium" onCLick={handleMediumLevel} />
-        <Btn name="Hard" onCLick={handleHardLevel} />
+        <Btn name="Easy" onClick={handleEasyClick} />
+        <Btn name="Medium" onClick={handleMediumLevel} />
+        <Btn name="Hard" onClick={handleHardLevel} />
       </div>
       <div className="flex w-full  justify-between items-center">
         <div className="ml-10 flex gap-3">

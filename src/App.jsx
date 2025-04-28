@@ -14,7 +14,7 @@ function App() {
       }}
     >
       {gameStart ? (
-        <Game level={level} />
+        <Game level={level} setGameStart={setGameStart} />
       ) : (
         <Home setGameStart={setGameStart} level={level} setLevel={setLevel} />
       )}

@@ -1,15 +1,21 @@
 import React from "react";
 import PokemonLogo from "../assets/pokemon-logo.png";
-import EasyLevel from "./EasyLevel";
-import MediumLevel from "./MediumLevel";
-import HardLevel from "./HardLevel";
 
-export default function Game({ level }) {
+export default function Game({ level, setGameStart }) {
+  
+  function handlePokemonLogo() {
+    setGameStart(false);
+  }
   return (
     <div className="h-screen w-screen flex flex-col justify-evenly items-center ">
       <header className="flex justify-around items-center  pt-2 pb-2 w-full gap-180 ">
         <div>
-          <img className="h-30" src={PokemonLogo} alt="" />
+          <img
+            className="h-30  hover:scale-[1.2] active:translate-y-[5px]"
+            src={PokemonLogo}
+            alt=""
+            onClick={handlePokemonLogo}
+          />
         </div>
         <div className="border-2 rounded-xl p-2 h-25 flex flex-col justify-center text-3xl bg-[#2654FF] ">
           <div>Score:0</div>
