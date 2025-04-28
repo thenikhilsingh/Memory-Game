@@ -5,23 +5,22 @@ import Btn from "./Btn";
 import BtnRounded from "./BtnRounded";
 import { mdiMusic, mdiVolumeHigh } from "@mdi/js";
 import Icon from "@mdi/react";
-import EasyLevel from "./EasyLevel";
-import MediumLevel from "./MediumLevel";
-import HardLevel from "./HardLevel";
 
-export default function Home({ setGameStart, setLevel }) {
-  
+export default function Home({ setGameStart, setLevel, setTotalRounds }) {
   function handleEasyClick() {
     setGameStart(true);
-    setLevel(<EasyLevel />);
+    setTotalRounds(3);
+    setLevel("easy");
   }
   function handleMediumLevel() {
     setGameStart(true);
-    setLevel(<MediumLevel />);
+    setTotalRounds(4);
+    setLevel("medium");
   }
   function handleHardLevel() {
     setGameStart(true);
-    setLevel(<HardLevel />);
+    setTotalRounds(5);
+    setLevel("hard");
   }
   return (
     <div className="h-screen w-screen flex flex-col justify-evenly items-center ">

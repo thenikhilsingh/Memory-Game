@@ -5,7 +5,11 @@ import { useState } from "react";
 
 function App() {
   const [gameStart, setGameStart] = useState(false);
-  const [level, setLevel] = useState("");
+  const [level, setLevel] = useState(""); // easy, medium, hard
+  const [score, setScore] = useState(0);
+  const [bestScore, setBestScore] = useState(0);
+  const [currentRound, setCurrentRound] = useState(0);
+  const [totalRounds, setTotalRounds] = useState(null);
   return (
     <div
       className="h-screen w-screen bg-no-repeat bg-cover"
@@ -14,9 +18,23 @@ function App() {
       }}
     >
       {gameStart ? (
-        <Game level={level} setGameStart={setGameStart} />
+        <Game
+          level={level}
+          setGameStart={setGameStart}
+          score={score}
+          setScore={setScore}
+          bestScore={bestScore}
+          setBestScore={setBestScore}
+          currentRound={currentRound}
+          setCurrentRound={setCurrentRound}
+          totalRounds={totalRounds}
+        />
       ) : (
-        <Home setGameStart={setGameStart} level={level} setLevel={setLevel} />
+        <Home
+          setGameStart={setGameStart}
+          setLevel={setLevel}
+          setTotalRounds={setTotalRounds}
+        />
       )}
     </div>
   );

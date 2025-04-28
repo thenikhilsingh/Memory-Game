@@ -1,10 +1,27 @@
 import React from "react";
 import PokemonLogo from "../assets/pokemon-logo.png";
+import ScoreBoard from "./ScoreBoard";
+import TotalRounds from "./TotalRounds";
+import EasyLevel from "./EasyLevel";
+import MediumLevel from "./MediumLevel";
+import HardLevel from "./HardLevel";
 
-export default function Game({ level, setGameStart }) {
-  
+export default function Game({
+  level,
+  setGameStart,
+  score,
+  setScore,
+  bestScore,
+  setBestScore,
+  currentRound,
+  setCurrentRound,
+  totalRounds,
+}) {
   function handlePokemonLogo() {
     setGameStart(false);
+    setScore(0);
+    setBestScore(0);
+    setCurrentRound(0);
   }
   return (
     <div className="h-screen w-screen flex flex-col justify-evenly items-center ">
@@ -17,14 +34,36 @@ export default function Game({ level, setGameStart }) {
             onClick={handlePokemonLogo}
           />
         </div>
-        <div className="border-2 rounded-xl p-2 h-25 flex flex-col justify-center text-3xl bg-[#2654FF] ">
-          <div>Score:0</div>
-          <div>Best Score:0</div>
+        <div>
+          <ScoreBoard score={score} bestScore={bestScore} />
         </div>
       </header>
-      <main>{level}</main>
+      <main>
+        {level == "easy" ? (
+          <EasyLevel
+            score={score}
+            setScore={setScore}
+            setBestScore={setBestScore}
+            setCurrentRound={setCurrentRound}
+          />
+        ) : level == "medium" ? (
+          <MediumLevel
+            score={score}
+            setScore={setScore}
+            setBestScore={setBestScore}
+            setCurrentRound={setCurrentRound}
+          />
+        ) : (
+          <HardLevel
+            score={score}
+            setScore={setScore}
+            setBestScore={setBestScore}
+            setCurrentRound={setCurrentRound}
+          />
+        )}
+      </main>
       <footer>
-        <div className="font-bold text-4xl text-[white]">0/5</div>
+        <TotalRounds currentRound={currentRound} totalRounds={totalRounds} />
       </footer>
     </div>
   );
