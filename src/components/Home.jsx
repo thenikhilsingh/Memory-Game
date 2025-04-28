@@ -1,26 +1,65 @@
-import React from "react";
+import React, { useState } from "react";
 import PokemonLogo from "../assets/pokemon-logo.png";
 import memoryGame from "../assets/memory-game.png";
 import Btn from "./Btn";
 import BtnRounded from "./BtnRounded";
-import { mdiMusic, mdiVolumeHigh } from "@mdi/js";
+import {
+  mdiMusic,
+  mdiVolumeHigh,
+  mdiVolumeOff,
+  mdiMusicNoteOff,
+} from "@mdi/js";
 import Icon from "@mdi/react";
+import GameDetailImg from "../assets/GameDetailImg.png";
+import btnSound from "../assets/btnSound.wav";
+import gameMusic from "../assets/gameMusic.mp3";
 
 export default function Home({ setGameStart, setLevel, setTotalRounds }) {
+  const [gameDetail, setGameDetail] = useState(false);
+  const [sound, setSound] = useState(true);
+  const [music, setMusic] = useState(false);
+
+  const playSound = () => {
+    const audio = new Audio(btnSound);
+    audio.play();
+  };
+
+  const playBgMusic = () => {
+    if (music) {
+      const bgMusic = new Audio(gameMusic);
+      bgMusic.play();
+    }
+  };
+  playBgMusic();
+
   function handleEasyClick() {
     setGameStart(true);
     setTotalRounds(3);
     setLevel("easy");
+    sound && playSound();
   }
   function handleMediumLevel() {
     setGameStart(true);
     setTotalRounds(4);
     setLevel("medium");
+    sound && playSound();
   }
   function handleHardLevel() {
     setGameStart(true);
     setTotalRounds(5);
     setLevel("hard");
+    sound && playSound();
+  }
+  function handleSoundBtn() {
+    sound == false ? setSound(true) : setSound(false);
+  }
+  function handleMusicBtn() {
+    music == false ? setMusic(true) : setMusic(false);
+  }
+
+  function handleGameDetailBtn() {
+    gameDetail == false ? setGameDetail(true) : setGameDetail(false);
+    sound && playSound();
   }
   return (
     <div className="h-screen w-screen flex flex-col justify-evenly items-center ">
@@ -37,13 +76,45 @@ export default function Home({ setGameStart, setLevel, setTotalRounds }) {
       </div>
       <div className="flex w-full  justify-between items-center">
         <div className="ml-10 flex gap-3">
-          <BtnRounded name={<Icon path={mdiVolumeHigh} size={1} />} />
-          <BtnRounded name={<Icon path={mdiMusic} size={1} />} />
+          <BtnRounded
+            name={
+              <Icon
+                path={sound ? mdiVolumeHigh : mdiVolumeOff}
+                size={1}
+                onClick={handleSoundBtn}
+              />
+            }
+          />
+          <BtnRounded
+            name={
+              <Icon
+                path={music ? mdiMusic : mdiMusicNoteOff}
+                size={1}
+                onClick={handleMusicBtn}
+              />
+            }
+          />
         </div>
         <div className="mr-10">
-          <BtnRounded name="?" />
+          <BtnRounded
+            name={gameDetail ? "X" : "?"}
+            onClick={handleGameDetailBtn}
+          />
         </div>
       </div>
+      {gameDetail && (
+        <div className="fixed bottom-0 right-20 flex">
+          <div className="flex flex-col gap-2">
+            <div className="bg-blue-700 text-[#FFCD02] rounded-xl text-xl p-2  shadow-[0px_9px_18px_-6px_#000000]">
+              Don't click on the same card twice!
+            </div>
+            <div className="bg-blue-700 text-[#FFCD02] rounded-xl text-xl p-2  shadow-[0px_9px_18px_-6px_#000000]">
+              Click on POKEMON logo to go back.
+            </div>
+          </div>
+          <img className="h-40" src={GameDetailImg} alt="" />
+        </div>
+      )}
     </div>
   );
 }
