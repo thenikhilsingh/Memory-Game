@@ -58,7 +58,7 @@ export default function HardLevel({
           `https://api.giphy.com/v1/gifs/search?api_key=qIrKdYzjgTClPzFJN1QFjc8X3xeNx21F&q=${searchedWord}&limit=25&offset=0&rating=g&lang=en&bundle=messaging_non_clips`
         );
         const pokemonData = await response.json();
-        return pokemonData.data[0].images.original.url;
+        return pokemonData.data.map((item) => item.images.original.url);
       } catch (error) {
         console.log(error);
       }
@@ -114,14 +114,18 @@ export default function HardLevel({
           </div>
         </div>
       ) : (
-        pokemon.map((item, index) => (
-          <Card
-            key={index}
-            data={item.data}
-            pokemonName={item.name}
-            onClick={() => handleCardClick(item.name)}
-          />
-        ))
+        pokemon.map((item, index) => {
+          const randomImage = item.data[Math.floor(Math.random() * 5)];
+
+          return (
+            <Card
+              key={index}
+              data={randomImage}
+              pokemonName={item.name}
+              onClick={() => handleCardClick(item.name)}
+            />
+          );
+        })
       )}
     </div>
   );
