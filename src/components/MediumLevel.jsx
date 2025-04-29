@@ -2,31 +2,49 @@ import React, { useState, useEffect } from "react";
 import Card from "./Card";
 import { shuffleArr } from "../utils";
 import loseImg from "../assets/lose.jpg";
-import WinImg from "../assets/win.jpeg";
+import winImg from "../assets/win.jpeg";
+import cardSound from "../assets/cardSound.mp3";
 
 export default function MediumLevel({
   score,
   setScore,
   setBestScore,
   setCurrentRound,
+  level,
 }) {
   const [pokemon, setPokemon] = useState([
     { name: "Pikachu", data: [] },
     { name: "Bulbasaur", data: [] },
     { name: "Charmander", data: [] },
     { name: "Squirtle", data: [] },
+    { name: "Jigglypuff", data: [] },
+    { name: "Meowth", data: [] },
+    { name: "Eevee", data: [] },
+    { name: "Snorlax", data: [] },
+    { name: "Pidgey", data: [] },
+    { name: "Rattata", data: [] },
   ]);
   const [clicked, setClicked] = useState([]);
   const [lost, setLost] = useState(false);
   const [win, setWin] = useState(false);
+  const [flipAll, setFlipAll] = useState(false);
 
   useEffect(() => {
-    if (score === 4) {
+    if (score === 10) {
       setWin(true);
     }
   }, [score]);
 
+  const playSound = () => {
+    const audio = new Audio(cardSound);
+    audio.play();
+  };
+
   function handleCardClick(name) {
+    setFlipAll(true);
+    setTimeout(() => setFlipAll(false), 1000);
+    playSound();
+
     if (clicked.includes(name)) {
       setLost(true);
       setBestScore((prevBest) => (score > prevBest ? score : prevBest));
@@ -77,11 +95,11 @@ export default function MediumLevel({
   }, []);
 
   return (
-    <div className="flex gap-8 flex-wrap justify-center">
+    <div className="flex justify-center items-center   gap-8 flex-wrap">
       {win ? (
         <div
           className="h-95 w-180 bg-no-repeat bg-cover shadow-[0px_9px_30px_-6px_#00A63E] rounded-4xl"
-          style={{ backgroundImage: `url(${WinImg})` }}
+          style={{ backgroundImage: `url(${winImg})` }}
         >
           <div className="bg-[rgba(123,255,70,0.41)] h-95 flex flex-col justify-between items-center p-5 rounded-4xl">
             <div className="text-white text-3xl bg-green-600 rounded-3xl h-15 w-50 flex justify-center items-center">
@@ -115,13 +133,14 @@ export default function MediumLevel({
       ) : (
         pokemon.map((item, index) => {
           const randomImage = item.data[Math.floor(Math.random() * 5)];
-
           return (
             <Card
               key={index}
               data={randomImage}
               pokemonName={item.name}
               onClick={() => handleCardClick(item.name)}
+              level={level}
+              triggerFlip={flipAll}
             />
           );
         })

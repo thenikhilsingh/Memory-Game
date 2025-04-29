@@ -5,6 +5,7 @@ import TotalRounds from "./TotalRounds";
 import EasyLevel from "./EasyLevel";
 import MediumLevel from "./MediumLevel";
 import HardLevel from "./HardLevel";
+import btnSound from "../assets/btnSound.wav";
 
 export default function Game({
   level,
@@ -17,11 +18,17 @@ export default function Game({
   setCurrentRound,
   totalRounds,
 }) {
+  const playSound = () => {
+    const audio = new Audio(btnSound);
+    audio.play();
+  };
+
   function handlePokemonLogo() {
     setGameStart(false);
     setScore(0);
     setBestScore(0);
     setCurrentRound(0);
+    playSound();
   }
   return (
     <div className="h-screen w-screen flex flex-col justify-evenly items-center ">
@@ -45,6 +52,7 @@ export default function Game({
             setScore={setScore}
             setBestScore={setBestScore}
             setCurrentRound={setCurrentRound}
+            level={level}
           />
         ) : level == "medium" ? (
           <MediumLevel
@@ -52,6 +60,7 @@ export default function Game({
             setScore={setScore}
             setBestScore={setBestScore}
             setCurrentRound={setCurrentRound}
+            level={level}
           />
         ) : (
           <HardLevel
@@ -59,6 +68,7 @@ export default function Game({
             setScore={setScore}
             setBestScore={setBestScore}
             setCurrentRound={setCurrentRound}
+            level={level}
           />
         )}
       </main>

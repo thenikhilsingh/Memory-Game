@@ -1,46 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "./Card";
-import { useEffect } from "react";
 import { shuffleArr } from "../utils";
 import loseImg from "../assets/lose.jpg";
-import WinImg from "../assets/win.jpeg";
-import pokemonball from "../assets/pokemonball.png";
+import winImg from "../assets/win.jpeg";
+import cardSound from "../assets/cardSound.mp3";
 
 export default function EasyLevel({
   score,
   setScore,
   setBestScore,
   setCurrentRound,
+  level,
 }) {
   const [pokemon, setPokemon] = useState([
     { name: "Pikachu", data: [] },
     { name: "Bulbasaur", data: [] },
     { name: "Charmander", data: [] },
+    { name: "Squirtle", data: [] },
+    { name: "Jigglypuff", data: [] },
   ]);
   const [clicked, setClicked] = useState([]);
   const [lost, setLost] = useState(false);
   const [win, setWin] = useState(false);
+  const [flipAll, setFlipAll] = useState(false);
+
+  const playSound = () => {
+    const audio = new Audio(cardSound);
+    audio.play();
+  };
 
   useEffect(() => {
-    if (score === 3) {
+    if (score === 5) {
       setWin(true);
     }
   }, [score]);
 
   function handleCardClick(name) {
+    setFlipAll(true);
+    setTimeout(() => setFlipAll(false), 1000);
+    playSound();
+
     if (clicked.includes(name)) {
       setLost(true);
       setBestScore((prevBest) => (score > prevBest ? score : prevBest));
     } else {
       setClicked([...clicked, name]);
-      setScore((prev) => {
-        return prev + 1;
-      });
-      setCurrentRound((prev) => {
-        return prev + 1;
-      });
+      setScore((prev) => prev + 1);
+      setCurrentRound((prev) => prev + 1);
 
-      //suffle Cards
       const newArr = [...pokemon];
       newArr.splice(0, newArr.length, ...shuffleArr(newArr));
       setPokemon(newArr);
@@ -83,13 +90,11 @@ export default function EasyLevel({
   }, []);
 
   return (
-    <div className="flex gap-8">
+    <div className="flex gap-8 flex-wrap">
       {win ? (
         <div
           className="h-95 w-180 bg-no-repeat bg-cover shadow-[0px_9px_30px_-6px_#00A63E] rounded-4xl"
-          style={{
-            backgroundImage: `url(${WinImg})`,
-          }}
+          style={{ backgroundImage: `url(${winImg})` }}
         >
           <div className="bg-[rgba(123,255,70,0.41)] h-95 flex flex-col justify-between items-center p-5 rounded-4xl">
             <div className="text-white text-3xl bg-green-600 rounded-3xl h-15 w-50 flex justify-center items-center">
@@ -106,9 +111,7 @@ export default function EasyLevel({
       ) : lost ? (
         <div
           className="h-95 w-180 bg-no-repeat bg-cover shadow-[0px_9px_30px_-6px_#fc0303] rounded-4xl"
-          style={{
-            backgroundImage: `url(${loseImg})`,
-          }}
+          style={{ backgroundImage: `url(${loseImg})` }}
         >
           <div className="bg-[rgba(255,70,70,0.41)] h-95 flex flex-col justify-between items-center p-5 rounded-4xl">
             <div className="text-white text-3xl bg-red-600 rounded-3xl h-15 w-50 flex justify-center items-center">
@@ -125,13 +128,14 @@ export default function EasyLevel({
       ) : (
         pokemon.map((item, index) => {
           const randomImage = item.data[Math.floor(Math.random() * 5)];
-
           return (
             <Card
               key={index}
               data={randomImage}
               pokemonName={item.name}
               onClick={() => handleCardClick(item.name)}
+              level={level}
+              triggerFlip={flipAll}
             />
           );
         })

@@ -8,3 +8,4 @@ export default function TotalRounds({ currentRound, totalRounds }) {
     </div>
   );
 }
+

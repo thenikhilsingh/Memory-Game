@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import { useEffect } from "react";
 import PokemonLogo from "../assets/pokemon-logo.png";
 import memoryGame from "../assets/memory-game.png";
 import Btn from "./Btn";
@@ -17,36 +18,32 @@ import gameMusic from "../assets/gameMusic.mp3";
 export default function Home({ setGameStart, setLevel, setTotalRounds }) {
   const [gameDetail, setGameDetail] = useState(false);
   const [sound, setSound] = useState(true);
-  const [music, setMusic] = useState(false);
-
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioref = useRef(null);
   const playSound = () => {
     const audio = new Audio(btnSound);
     audio.play();
   };
 
-  const playBgMusic = () => {
-    if (music) {
-      const bgMusic = new Audio(gameMusic);
-      bgMusic.play();
-    }
-  };
-  playBgMusic();
+  useEffect(() => {
+    audioref.current = new Audio(gameMusic);
+  }, []);
 
   function handleEasyClick() {
     setGameStart(true);
-    setTotalRounds(3);
+    setTotalRounds(5);
     setLevel("easy");
     sound && playSound();
   }
   function handleMediumLevel() {
     setGameStart(true);
-    setTotalRounds(4);
+    setTotalRounds(10);
     setLevel("medium");
     sound && playSound();
   }
   function handleHardLevel() {
     setGameStart(true);
-    setTotalRounds(5);
+    setTotalRounds(15);
     setLevel("hard");
     sound && playSound();
   }
@@ -54,7 +51,8 @@ export default function Home({ setGameStart, setLevel, setTotalRounds }) {
     sound == false ? setSound(true) : setSound(false);
   }
   function handleMusicBtn() {
-    music == false ? setMusic(true) : setMusic(false);
+    !isPlaying ? audioref.current.play() : audioref.current.pause();
+    setIsPlaying(!isPlaying);
   }
 
   function handleGameDetailBtn() {
@@ -88,7 +86,7 @@ export default function Home({ setGameStart, setLevel, setTotalRounds }) {
           <BtnRounded
             name={
               <Icon
-                path={music ? mdiMusic : mdiMusicNoteOff}
+                path={isPlaying ? mdiMusic : mdiMusicNoteOff}
                 size={1}
                 onClick={handleMusicBtn}
               />
