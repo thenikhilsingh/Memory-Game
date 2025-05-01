@@ -14,15 +14,15 @@ export default function Card({
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   // Capture mouse position over the card
+  //start
   const handleMouseMove = (e) => {
+    if (triggerFlip) return; // Disable hover effect during flip
+
     const { offsetX, offsetY, target } = e.nativeEvent;
     const width = target.offsetWidth;
     const height = target.offsetHeight;
-
-    // Calculate tilt based on mouse position
-    const rotateY = (offsetX / width) * 30 - 15; // max 15 degrees tilt in both directions
-    const rotateX = (offsetY / height) * 30 - 15; // max 15 degrees tilt in both directions
-
+    const rotateY = (offsetX / width) * 30 - 15;
+    const rotateX = (offsetY / height) * 30 - 15;
     setMousePosition({ x: rotateY, y: rotateX });
   };
 
@@ -30,7 +30,7 @@ export default function Card({
     <>
       {level == "easy" ? ( //easy level
         <div
-          className={`card-container ${level}`}
+          className={`card-container ${level} ${triggerFlip ? "no-hover" : ""}`}
           onClick={onClick}
           onMouseMove={handleMouseMove}
           style={{
@@ -50,7 +50,7 @@ export default function Card({
         </div>
       ) : level == "medium" ? ( //medium level
         <div
-          className={`card-container2 ${level}`}
+          className={`card-container2 ${level}  ${triggerFlip ? "no-hover" : ""}`}
           onClick={onClick}
           onMouseMove={handleMouseMove}
           style={{
@@ -71,7 +71,7 @@ export default function Card({
       ) : (
         //hard level
         <div
-          className={`card-container3 ${level}`}
+          className={`card-container3 ${level}  ${triggerFlip ? "no-hover" : ""}`}
           onClick={onClick}
           onMouseMove={handleMouseMove}
           style={{

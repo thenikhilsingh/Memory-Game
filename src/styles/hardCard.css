@@ -15,9 +15,16 @@
   transform-style: preserve-3d;
 }
 
+/* Hover effects only when not flipping*/
+.card-container3:not(.no-hover):hover .card-inner3 {
+  transform: perspective(1000px) rotateY(var(--rotateY, 0deg))
+    rotateX(var(--rotateX, 0deg));
+  cursor: pointer;
+}
+
 /* Flipping effect when the card is clicked */
 .card-inner3.flipped {
-  transform: rotateY(180deg);
+  transform: rotateY(180deg) !important;
 }
 
 /* Front of the card */
