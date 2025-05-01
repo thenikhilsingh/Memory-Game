@@ -4,6 +4,19 @@ import { shuffleArr } from "../utils";
 import loseImg from "../assets/lose.jpg";
 import winImg from "../assets/win.jpeg";
 import cardSound from "../assets/cardSound.mp3";
+import btnSound from "../assets/btnSound.wav";
+
+// Fallback images
+import pikachu from "../assets/pikachu.gif";
+import bulbasaur from "../assets/bulbasaur.gif";
+import charmander from "../assets/charmander.gif";
+import squirtle from "../assets/squirtle.gif";
+import jigglypuff from "../assets/jigglypuff.gif";
+import meowth from "../assets/meowth.gif";
+import eevee from "../assets/eevee.gif";
+import snorlax from "../assets/snorlax.gif";
+import pidgey from "../assets/pidgey.gif";
+import rattata from "../assets/rattata.gif";
 
 export default function MediumLevel({
   score,
@@ -24,10 +37,25 @@ export default function MediumLevel({
     { name: "Pidgey", data: [] },
     { name: "Rattata", data: [] },
   ]);
+
   const [clicked, setClicked] = useState([]);
   const [lost, setLost] = useState(false);
   const [win, setWin] = useState(false);
   const [flipAll, setFlipAll] = useState(false);
+
+  // Fallback image map
+  const fallbackImages = {
+    Pikachu: pikachu,
+    Bulbasaur: bulbasaur,
+    Charmander: charmander,
+    Squirtle: squirtle,
+    Jigglypuff: jigglypuff,
+    Meowth: meowth,
+    Eevee: eevee,
+    Snorlax: snorlax,
+    Pidgey: pidgey,
+    Rattata: rattata,
+  };
 
   useEffect(() => {
     if (score === 10) {
@@ -37,6 +65,10 @@ export default function MediumLevel({
 
   const playSound = () => {
     const audio = new Audio(cardSound);
+    audio.play();
+  };
+  const playBtnSound = () => {
+    const audio = new Audio(btnSound);
     audio.play();
   };
 
@@ -59,13 +91,23 @@ export default function MediumLevel({
     }
   }
 
-  function handleRestartBtn() {
+  function handleWinRestartBtn() {
     setScore(0);
     setBestScore(0);
     setClicked([]);
     setCurrentRound(0);
     setWin(false);
     setLost(false);
+    playBtnSound();
+  }
+  function handleLoseRestartBtn() {
+    setScore(0);
+    setBestScore(score);
+    setClicked([]);
+    setCurrentRound(0);
+    setWin(false);
+    setLost(false);
+    playBtnSound();
   }
 
   useEffect(() => {
@@ -78,6 +120,7 @@ export default function MediumLevel({
         return pokemonData.data.map((item) => item.images.original.url);
       } catch (error) {
         console.log(error);
+        return []; // Return empty array on error
       }
     }
 
@@ -95,7 +138,7 @@ export default function MediumLevel({
   }, []);
 
   return (
-    <div className="flex justify-center items-center   gap-8 flex-wrap">
+    <div className="flex justify-center items-center gap-8 flex-wrap">
       {win ? (
         <div
           className="h-95 w-180 bg-no-repeat bg-cover shadow-[0px_9px_30px_-6px_#00A63E] rounded-4xl"
@@ -107,7 +150,7 @@ export default function MediumLevel({
             </div>
             <button
               className="bg-white text-3xl font-bold h-13 w-34 rounded-2xl shadow-[0px_9px_18px_-6px_#000000] hover:scale-[1.2] active:translate-y-[5px]"
-              onClick={handleRestartBtn}
+              onClick={handleWinRestartBtn}
             >
               Restart
             </button>
@@ -124,7 +167,7 @@ export default function MediumLevel({
             </div>
             <button
               className="bg-red-600 text-3xl font-bold h-13 w-34 rounded-2xl shadow-[0px_9px_18px_-6px_#000000] hover:scale-[1.2] active:translate-y-[5px]"
-              onClick={handleRestartBtn}
+              onClick={handleLoseRestartBtn}
             >
               Restart
             </button>
@@ -132,7 +175,13 @@ export default function MediumLevel({
         </div>
       ) : (
         pokemon.map((item, index) => {
-          const randomImage = item.data[Math.floor(Math.random() * 5)];
+          const randomImage =
+            item.data && item.data.length > 0
+              ? item.data[
+                  Math.floor(Math.random() * Math.min(5, item.data.length))
+                ]
+              : fallbackImages[item.name];
+
           return (
             <Card
               key={index}

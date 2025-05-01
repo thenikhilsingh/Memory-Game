@@ -4,6 +4,12 @@ import { shuffleArr } from "../utils";
 import loseImg from "../assets/lose.jpg";
 import winImg from "../assets/win.jpeg";
 import cardSound from "../assets/cardSound.mp3";
+import pikachu from "../assets/pikachu.gif";
+import bulbasaur from "../assets/bulbasaur.gif";
+import charmander from "../assets/charmander.gif";
+import squirtle from "../assets/squirtle.gif";
+import jigglypuff from "../assets/jigglypuff.gif";
+import btnSound from "../assets/btnSound.wav";
 
 export default function EasyLevel({
   score,
@@ -19,6 +25,13 @@ export default function EasyLevel({
     { name: "Squirtle", data: [] },
     { name: "Jigglypuff", data: [] },
   ]);
+  const fallbackImages = {
+    Pikachu: pikachu,
+    Bulbasaur: bulbasaur,
+    Charmander: charmander,
+    Squirtle: squirtle,
+    Jigglypuff: jigglypuff,
+  };
   const [clicked, setClicked] = useState([]);
   const [lost, setLost] = useState(false);
   const [win, setWin] = useState(false);
@@ -26,6 +39,11 @@ export default function EasyLevel({
 
   const playSound = () => {
     const audio = new Audio(cardSound);
+    audio.play();
+  };
+
+  const playBtnSound = () => {
+    const audio = new Audio(btnSound);
     audio.play();
   };
 
@@ -54,13 +72,23 @@ export default function EasyLevel({
     }
   }
 
-  function handleRestartBtn() {
+  function handleWinRestartBtn() {
     setScore(0);
     setBestScore(0);
     setClicked([]);
     setCurrentRound(0);
     setWin(false);
     setLost(false);
+    playBtnSound();
+  }
+  function handleLoseRestartBtn() {
+    setScore(0);
+    setBestScore(score);
+    setClicked([]);
+    setCurrentRound(0);
+    setWin(false);
+    setLost(false);
+    playBtnSound();
   }
 
   useEffect(() => {
@@ -73,6 +101,7 @@ export default function EasyLevel({
         return pokemonData.data.map((item) => item.images.original.url);
       } catch (error) {
         console.log(error);
+        return []; // Return empty array on error
       }
     }
 
@@ -90,7 +119,7 @@ export default function EasyLevel({
   }, []);
 
   return (
-    <div className="flex gap-8 flex-wrap">
+    <div className="flex justify-center items-center gap-8 flex-wrap">
       {win ? (
         <div
           className="h-95 w-180 bg-no-repeat bg-cover shadow-[0px_9px_30px_-6px_#00A63E] rounded-4xl"
@@ -102,7 +131,7 @@ export default function EasyLevel({
             </div>
             <button
               className="bg-white text-3xl font-bold h-13 w-34 rounded-2xl shadow-[0px_9px_18px_-6px_#000000] hover:scale-[1.2] active:translate-y-[5px]"
-              onClick={handleRestartBtn}
+              onClick={handleWinRestartBtn}
             >
               Restart
             </button>
@@ -119,7 +148,7 @@ export default function EasyLevel({
             </div>
             <button
               className="bg-red-600 text-3xl font-bold h-13 w-34 rounded-2xl shadow-[0px_9px_18px_-6px_#000000] hover:scale-[1.2] active:translate-y-[5px]"
-              onClick={handleRestartBtn}
+              onClick={handleLoseRestartBtn}
             >
               Restart
             </button>
@@ -127,7 +156,13 @@ export default function EasyLevel({
         </div>
       ) : (
         pokemon.map((item, index) => {
-          const randomImage = item.data[Math.floor(Math.random() * 5)];
+          const randomImage =
+            item.data && item.data.length > 0
+              ? item.data[
+                  Math.floor(Math.random() * Math.min(5, item.data.length))
+                ]
+              : fallbackImages[item.name];
+
           return (
             <Card
               key={index}
