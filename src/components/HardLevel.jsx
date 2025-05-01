@@ -29,6 +29,7 @@ export default function HardLevel({
   setBestScore,
   setCurrentRound,
   level,
+  sound,
 }) {
   const [pokemon, setPokemon] = useState([
     { name: "Pikachu", data: [] },
@@ -90,7 +91,7 @@ export default function HardLevel({
   function handleCardClick(name) {
     setFlipAll(true);
     setTimeout(() => setFlipAll(false), 1000);
-    playSound();
+    sound && playSound();
 
     if (clicked.includes(name)) {
       setLost(true);
@@ -113,7 +114,7 @@ export default function HardLevel({
     setCurrentRound(0);
     setWin(false);
     setLost(false);
-    playBtnSound();
+    sound && playBtnSound();
   }
   function handleLoseRestartBtn() {
     setScore(0);
@@ -122,7 +123,7 @@ export default function HardLevel({
     setCurrentRound(0);
     setWin(false);
     setLost(false);
-    playBtnSound();
+    sound && playBtnSound();
   }
 
   useEffect(() => {

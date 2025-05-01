@@ -15,19 +15,21 @@ import GameDetailImg from "../assets/GameDetailImg.png";
 import btnSound from "../assets/btnSound.wav";
 import gameMusic from "../assets/gameMusic.mp3";
 
-export default function Home({ setGameStart, setLevel, setTotalRounds }) {
+export default function Home({
+  setGameStart,
+  setLevel,
+  setTotalRounds,
+  sound,
+  setSound,
+  isPlaying,
+  onMusicToggle,
+}) {
   const [gameDetail, setGameDetail] = useState(false);
-  const [sound, setSound] = useState(true);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioref = useRef(null);
+
   const playSound = () => {
     const audio = new Audio(btnSound);
     audio.play();
   };
-
-  useEffect(() => {
-    audioref.current = new Audio(gameMusic);
-  }, []);
 
   function handleEasyClick() {
     setGameStart(true);
@@ -48,11 +50,8 @@ export default function Home({ setGameStart, setLevel, setTotalRounds }) {
     sound && playSound();
   }
   function handleSoundBtn() {
-    sound == false ? setSound(true) : setSound(false);
-  }
-  function handleMusicBtn() {
-    !isPlaying ? audioref.current.play() : audioref.current.pause();
-    setIsPlaying(!isPlaying);
+    sound ? setSound(false) : setSound(true);
+    sound && playSound();
   }
 
   function handleGameDetailBtn() {
@@ -88,7 +87,7 @@ export default function Home({ setGameStart, setLevel, setTotalRounds }) {
               <Icon
                 path={isPlaying ? mdiMusic : mdiMusicNoteOff}
                 size={1}
-                onClick={handleMusicBtn}
+                onClick={onMusicToggle}
               />
             }
           />

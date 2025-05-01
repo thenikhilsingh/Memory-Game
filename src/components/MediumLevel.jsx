@@ -24,6 +24,7 @@ export default function MediumLevel({
   setBestScore,
   setCurrentRound,
   level,
+  sound,
 }) {
   const [pokemon, setPokemon] = useState([
     { name: "Pikachu", data: [] },
@@ -75,7 +76,7 @@ export default function MediumLevel({
   function handleCardClick(name) {
     setFlipAll(true);
     setTimeout(() => setFlipAll(false), 1000);
-    playSound();
+    sound && playSound();
 
     if (clicked.includes(name)) {
       setLost(true);
@@ -98,7 +99,7 @@ export default function MediumLevel({
     setCurrentRound(0);
     setWin(false);
     setLost(false);
-    playBtnSound();
+    sound && playBtnSound();
   }
   function handleLoseRestartBtn() {
     setScore(0);
@@ -107,7 +108,7 @@ export default function MediumLevel({
     setCurrentRound(0);
     setWin(false);
     setLost(false);
-    playBtnSound();
+    sound && playBtnSound();
   }
 
   useEffect(() => {

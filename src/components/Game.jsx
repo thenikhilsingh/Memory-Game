@@ -17,6 +17,7 @@ export default function Game({
   currentRound,
   setCurrentRound,
   totalRounds,
+  sound,
 }) {
   const playSound = () => {
     const audio = new Audio(btnSound);
@@ -28,7 +29,7 @@ export default function Game({
     setScore(0);
     setBestScore(0);
     setCurrentRound(0);
-    playSound();
+    sound && playSound();
   }
   return (
     <div className="h-screen w-screen flex flex-col justify-evenly items-center ">
@@ -53,6 +54,7 @@ export default function Game({
             setBestScore={setBestScore}
             setCurrentRound={setCurrentRound}
             level={level}
+            sound={sound}
           />
         ) : level == "medium" ? (
           <MediumLevel
@@ -61,6 +63,7 @@ export default function Game({
             setBestScore={setBestScore}
             setCurrentRound={setCurrentRound}
             level={level}
+            sound={sound}
           />
         ) : (
           <HardLevel
@@ -69,6 +72,7 @@ export default function Game({
             setBestScore={setBestScore}
             setCurrentRound={setCurrentRound}
             level={level}
+            sound={sound}
           />
         )}
       </main>
