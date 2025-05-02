@@ -1,5 +1,4 @@
-import React, { useRef, useState } from "react";
-import { useEffect } from "react";
+import React, { useState } from "react";
 import PokemonLogo from "../assets/pokemon-logo.png";
 import memoryGame from "../assets/memory-game.png";
 import Btn from "./Btn";
@@ -13,7 +12,6 @@ import {
 import Icon from "@mdi/react";
 import GameDetailImg from "../assets/GameDetailImg.png";
 import btnSound from "../assets/btnSound.wav";
-import gameMusic from "../assets/gameMusic.mp3";
 
 export default function Home({
   setGameStart,
@@ -100,12 +98,16 @@ export default function Home({
         </div>
       </div>
       {gameDetail && (
-        <div className="fixed bottom-0 right-20 flex">
+        <div
+          className={`fixed right-20 flex transition-all duration-500 ease-in-out ${
+            gameDetail ? "bottom-0" : "-bottom-full"
+          }`}
+        >
           <div className="flex flex-col gap-2">
-            <div className="bg-blue-700 text-[#FFCD02] rounded-xl text-xl p-2  shadow-[0px_9px_18px_-6px_#000000]">
+            <div className="bg-blue-700 text-[#FFCD02] rounded-xl text-xl p-2 shadow-[0px_9px_18px_-6px_#000000]">
               Don't click on the same card twice!
             </div>
-            <div className="bg-blue-700 text-[#FFCD02] rounded-xl text-xl p-2  shadow-[0px_9px_18px_-6px_#000000]">
+            <div className="bg-blue-700 text-[#FFCD02] rounded-xl text-xl p-2 shadow-[0px_9px_18px_-6px_#000000]">
               Click on POKEMON logo to go back.
             </div>
           </div>
